@@ -404,7 +404,6 @@ Elm.Native.WebGL.make = function(elm) {
   }
 
   function clearColor(r, g, b, a) {
-    cColor =  [r, g, b, a];
     return function(gl) { gl.clearColor(r, g, b, a); };
   }
 
