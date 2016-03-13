@@ -199,6 +199,9 @@ computeAPICall function =
           dst = computeBlendOperationString dst'
       in Native.WebGL.blendFunc src dst
 
+    ClearColor (r, g, b, a) ->
+      Native.WebGL.clearColor r g b a
+
     DepthFunc mode ->
       computeCompareModeString mode
       |> Native.WebGL.depthFunc
