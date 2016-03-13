@@ -310,6 +310,7 @@ type FunctionCall
   | BlendEquation BlendMode
   | BlendEquationSeparate (BlendMode, BlendMode)
   | BlendFunc (BlendOperation, BlendOperation)
+  | ClearColor (Float, Float, Float, Float)
   | DepthFunc CompareMode
   | SampleCoverageFunc (Float, Bool)
   | StencilFunc (CompareMode, Int, Int)
