@@ -22,6 +22,8 @@ Elm.Native.WebGL.make = function(elm) {
   var Tuple2 = Utils.Tuple2;
   var Task   = Elm.Native.Task.make(elm);
 
+  var cColor = [1, 1, 1, 1];
+
   function unsafeCoerceGLSL(src) {
     return { src : src };
   }
@@ -242,6 +244,7 @@ Elm.Native.WebGL.make = function(elm) {
 
     gl.viewport(0, 0, model.w, model.h);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.clearColor(cColor[0], cColor[1], cColor[2], cColor[3]);
     LOG("Drawing");
 
     function drawEntity(render) {
@@ -402,6 +405,11 @@ Elm.Native.WebGL.make = function(elm) {
     return function(gl) { gl.blendFunc(gl[src], gl[dst]); };
   }
 
+  function clearColor(r, g, b, a) {
+    cColor =  [r, g, b, a];
+    return function(gl) { gl.clearColor(r, g, b, a); };
+  }
+
   function depthFunc(mode) {
     return function(gl) { gl.depthFunc(gl[mode]); };
   }
@@ -525,6 +533,7 @@ Elm.Native.WebGL.make = function(elm) {
     blendEquation:blendEquation,
     blendEquationSeparate:F2(blendEquationSeparate),
     blendFunc:F2(blendFunc),
+    clearColor:F4(clearColor),
     depthFunc:depthFunc,
     sampleCoverage:F2(sampleCoverage),
     stencilFunc:F3(stencilFunc),
