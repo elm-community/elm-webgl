@@ -265,6 +265,13 @@ and alpha destination blending factors are computed
 + `SrcAlphaSaturate` should only be used for the srcFactor);
 + Both values may not reference a `ConstantColor` value;
 
+`ClearColor(red: Float, green: Float, blue: Float, alpha: Float)`
++ set the clear/background color
+
+`DepthFunc(func : CompareMode)`
++ specify the value used for depth buffer comparisons
++ `func`: Specifies the depth comparison function
+
 `SampleCoverageFunc(value: Float, invert: Bool)`
 + specify multisample coverage parameters
 + `value`: Specify a single floating-point sample coverage value.
