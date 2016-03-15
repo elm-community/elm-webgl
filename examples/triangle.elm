@@ -28,7 +28,7 @@ main =
 
 view : Float -> Element
 view t =
-  webgl (400,400)
+  webglWithConfig [Enable DepthTest, ClearColor (0, 0, 0, 1)] (400,400)
     [ render vertexShader fragmentShader mesh { perspective = perspective (t / 1000) } ]
 
 
@@ -42,28 +42,22 @@ perspective t =
 
 vertexShader : Shader { attr | position:Vec3, color:Vec3 } { unif | perspective:Mat4 } { vcolor:Vec3 }
 vertexShader = [glsl|
-
 attribute vec3 position;
 attribute vec3 color;
 uniform mat4 perspective;
 varying vec3 vcolor;
-
 void main () {
     gl_Position = perspective * vec4(position, 1.0);
     vcolor = color;
 }
-
 |]
 
 
 fragmentShader : Shader {} u { vcolor:Vec3 }
 fragmentShader = [glsl|
-
 precision mediump float;
 varying vec3 vcolor;
-
 void main () {
     gl_FragColor = vec4(vcolor, 1.0);
 }
-
 |]

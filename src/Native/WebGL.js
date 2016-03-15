@@ -242,6 +242,7 @@ Elm.Native.WebGL.make = function(elm) {
 
     gl.viewport(0, 0, model.w, model.h);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    
     LOG("Drawing");
 
     function drawEntity(render) {
@@ -402,6 +403,10 @@ Elm.Native.WebGL.make = function(elm) {
     return function(gl) { gl.blendFunc(gl[src], gl[dst]); };
   }
 
+  function clearColor(r, g, b, a) {
+    return function(gl) { gl.clearColor(r, g, b, a); };
+  }
+
   function depthFunc(mode) {
     return function(gl) { gl.depthFunc(gl[mode]); };
   }
@@ -525,6 +530,7 @@ Elm.Native.WebGL.make = function(elm) {
     blendEquation:blendEquation,
     blendEquationSeparate:F2(blendEquationSeparate),
     blendFunc:F2(blendFunc),
+    clearColor:F4(clearColor),
     depthFunc:depthFunc,
     sampleCoverage:F2(sampleCoverage),
     stencilFunc:F3(stencilFunc),
