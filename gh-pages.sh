@@ -3,20 +3,23 @@ set -e
 
 rm -rf gh-pages || exit 0;
 
-mkdir gh-pages
+mkdir -p gh-pages/examples
 
 # compile JS using Elm
 cd examples
 for i in crate cube first-person thwomp triangle; do
-  elm make $i.elm --yes --output ../gh-pages/$i.html
+  elm make $i.elm --yes --output ../gh-pages/examples/$i.html
 done
 
 # copy the textures
-cp -R texture ../gh-pages
-cp -R screenshots ../gh-pages
+cp -R texture ../gh-pages/examples
+cp -R screenshots ../gh-pages/examples
+
+# configure domain
+cd ../gh-pages
+echo "webgl.elm-community.org" >> CNAME
 
 # init branch and commit
-cd ../gh-pages
 git init
 git add .
 git commit -m "Deploying to GH Pages"

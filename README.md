@@ -8,11 +8,11 @@ GPU, meaning you can render things more quickly.
 [Here are some examples](https://github.com/elm-community/elm-webgl/tree/master/examples) so you can get a feel for the API, but make sure you
 read on to learn how WebGL and the GPU really work!
 
-[![Triangle](http://elm-community.github.io/elm-webgl/screenshots/triangle.jpg)](http://elm-community.github.io/elm-webgl/triangle.html)
-[![Cube](http://elm-community.github.io/elm-webgl/screenshots/cube.jpg)](http://elm-community.github.io/elm-webgl/cube.html)
-[![Crate](http://elm-community.github.io/elm-webgl/screenshots/crate.jpg)](http://elm-community.github.io/elm-webgl/crate.html)
-[![Thwomp](http://elm-community.github.io/elm-webgl/screenshots/thwomp.jpg)](http://elm-community.github.io/elm-webgl/thwomp.html)
-[![FirstPerson](http://elm-community.github.io/elm-webgl/screenshots/first-person.jpg)](http://elm-community.github.io/elm-webgl/first-person.html)
+[![Triangle](http://webgl.elm-community.org/examples/screenshots/triangle.jpg)](http://webgl.elm-community.org/examples/triangle.html)
+[![Cube](http://webgl.elm-community.org/examples/screenshots/cube.jpg)](http://webgl.elm-community.org/examples/cube.html)
+[![Crate](http://webgl.elm-community.org/examples/screenshots/crate.jpg)](http://webgl.elm-community.org/examples/crate.html)
+[![Thwomp](http://webgl.elm-community.org/examples/screenshots/thwomp.jpg)](http://webgl.elm-community.org/examples/thwomp.html)
+[![FirstPerson](http://webgl.elm-community.org/examples/screenshots/first-person.jpg)](http://webgl.elm-community.org/examples/first-person.html)
 
 ## Understanding WebGL
 
@@ -59,7 +59,7 @@ be and all of the meshes loaded onto the GPU will be transformed accordingly.
 The following diagram illustrates the entire pipeline. Keep reading past the
 diagram, all the terms will be explained!
 
-![WebGL Pipeline](https://raw.githubusercontent.com/johnpmayer/elm-webgl/master/pipeline.png)
+![WebGL Pipeline](https://raw.githubusercontent.com/elm-community/elm-webgl/master/pipeline.png)
 
 We start with a mesh. It's a bunch of raw data points that we want to render on
 screen. From there, the data flows through two types of shaders:
