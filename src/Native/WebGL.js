@@ -513,11 +513,12 @@ var _elm_community$elm_webgl$Native_WebGL = function () {
 
   // VIRTUAL-DOM WIDGETS
 
-  function toHtml(functionCalls, factList, renderables) {
+  function toHtml(canvasOptions, functionCalls, factList, renderables) {
     var model = {
       functionCalls: functionCalls,
       renderables: renderables,
-      cache: {}
+      cache: {},
+      canvasOptions: canvasOptions
     };
     return _elm_lang$virtual_dom$Native_VirtualDom.custom(factList, model, implementation);
   }
@@ -533,7 +534,7 @@ var _elm_community$elm_webgl$Native_WebGL = function () {
 
     LOG('Render canvas');
     var canvas = document.createElement('canvas');
-    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    var gl = canvas.getContext('webgl', model.canvasOptions) || canvas.getContext('experimental-webgl', model.canvasOptions);
 
     if (gl) {
       A2(_elm_lang$core$List$map, function (functionCall) {
@@ -577,7 +578,7 @@ var _elm_community$elm_webgl$Native_WebGL = function () {
     textureSize: textureSize,
     loadTexture: loadTexture,
     render: F5(render),
-    toHtml: F3(toHtml),
+    toHtml: F4(toHtml),
     enable: enable,
     disable: disable,
     blendColor: F4(blendColor),
