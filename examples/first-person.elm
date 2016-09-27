@@ -228,8 +228,8 @@ view {size, person, texture} =
           , ("position", "relative")
           ]
       ]
-      [ WebGL.toHtml
-          [width size.width, height size.height, style [("display", "block")]]
+      [ WebGL.toHtmlWithEvenMore { defaultContextAttributes | alpha = False } defaultConfiguration
+          [ width size.width, height size.height, style [("display", "block")] ]
           entities
       , div
           [ style
@@ -239,6 +239,7 @@ view {size, person, texture} =
               , ("left", "20px")
               , ("right", "20px")
               , ("top", "20px")
+              , ("color", "white")
               ]
           ]
           [text message]
