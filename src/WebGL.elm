@@ -165,7 +165,7 @@ toHtmlWith =
 {-|
 All possible options that you can specify when creating the WebGL context.
 See: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext
-or section 5.2 of [the WebGL specs](https://www.khronos.org/registry/webgl/specs/latest/1.0/)
+or [the WebGL specs](https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.2)
 -}
 type alias WebGLContextAttributes =
     { alpha: Bool
@@ -178,7 +178,7 @@ type alias WebGLContextAttributes =
 
 {-|
 The default WebGL context attributes.
-These are the same as [in the specs (section 5.2)](https://www.khronos.org/registry/webgl/specs/latest/1.0/)
+These are the same as [in the specs](https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.2)
 -}
 defaultContextAttributes : WebGLContextAttributes
 defaultContextAttributes =
@@ -194,7 +194,7 @@ defaultContextAttributes =
 The same as toHtmlWith, but with this version you can also specify attributes for the WebGL context.
 This is needed if you need specific features, e.g. the stencil buffer.
 See: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext
-or section 5.2 of [the WebGL specs](https://www.khronos.org/registry/webgl/specs/latest/1.0/)
+or [the WebGL specs](https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.2)
 -}
 toHtmlWithEvenMore : WebGLContextAttributes -> List FunctionCall -> List (Attribute msg) -> List Renderable -> Html msg
 toHtmlWithEvenMore options functionCalls =
