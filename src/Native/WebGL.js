@@ -124,19 +124,21 @@ var _elm_community$elm_webgl$Native_WebGL = function () {
   function get_render_info(gl, render_type) {
     switch (render_type) {
       case 'Triangle':
-        return { mode: gl.TRIANGLES, elemSize: 3 };
+        return { mode: gl.TRIANGLES, elemSize: 3, indexed: false };
       case 'LineStrip':
-        return { mode: gl.LINE_STRIP, elemSize: 1 };
+        return { mode: gl.LINE_STRIP, elemSize: 1, indexed: false };
       case 'LineLoop':
-        return { mode: gl.LINE_LOOP, elemSize: 1 };
+        return { mode: gl.LINE_LOOP, elemSize: 1, indexed: false };
       case 'Points':
-        return { mode: gl.POINTS, elemSize: 1 };
+        return { mode: gl.POINTS, elemSize: 1, indexed: false };
       case 'Lines':
-        return { mode: gl.LINES, elemSize: 2 };
+        return { mode: gl.LINES, elemSize: 2, indexed: false };
       case 'TriangleStrip':
-        return { mode: gl.TRIANGLE_STRIP, elemSize: 1 };
+        return { mode: gl.TRIANGLE_STRIP, elemSize: 1, indexed: false };
       case 'TriangleFan':
-        return { mode: gl.TRIANGLE_FAN, elemSize: 1 };
+        return { mode: gl.TRIANGLE_FAN, elemSize: 1, indexed: false };
+      case 'IndexedTriangles':
+        return { mode: gl.TRIANGLES, elemSize: 1, indexed: true };
     }
   }
 
@@ -250,6 +252,30 @@ var _elm_community$elm_webgl$Native_WebGL = function () {
 
   }
 
+  function do_bind_setup_indexed(gl, indices) {
+    var buffers = {};
+
+    var numIndices = _elm_lang$core$List$length(indices);
+    var indexBuffer = gl.createBuffer();
+    LOG('Created index buffer');
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    var ind = [];
+    A2(_elm_lang$core$List$map, function (elem) {
+      ind.push(elem);
+    }, indices);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, Uint16Array.from(ind), gl.STATIC_DRAW);
+
+    var bufferObject = {
+      numIndices: numIndices,
+      indexBuffer: indexBuffer,
+      buffers: buffers
+    };
+
+    return bufferObject;
+
+  }
+
   function getProgID(vertID, fragID) {
     return vertID + '#' + fragID;
   }
@@ -326,7 +352,11 @@ var _elm_community$elm_webgl$Native_WebGL = function () {
       var buffer = model.cache.buffers[render.buffer.guid];
 
       if (!buffer) {
-        buffer = do_bind_setup(gl, render.buffer._0, renderType.elemSize);
+        if (renderType.indexed) {
+          buffer = do_bind_setup_indexed(gl, render.buffer._0._1);
+        } else {
+          buffer = do_bind_setup(gl, render.buffer._0, renderType.elemSize);
+        }
         model.cache.buffers[render.buffer.guid] = buffer;
       }
 
@@ -343,7 +373,13 @@ var _elm_community$elm_webgl$Native_WebGL = function () {
         gl.enableVertexAttribArray(attribLocation);
 
         if (buffer.buffers[attribute.name] === undefined) {
-          buffer.buffers[attribute.name] = do_bind_attribute(gl, attribute, render.buffer._0, renderType.elemSize);
+          var bufferElems;
+          if (renderType.indexed) {
+            bufferElems = render.buffer._0._0, renderType.elemSize;
+          } else {
+            bufferElems = render.buffer._0, renderType.elemSize;
+          }
+          buffer.buffers[attribute.name] = do_bind_attribute(gl, attribute, bufferElems, renderType.elemSize);
         }
         var attributeBuffer = buffer.buffers[attribute.name];
         var attributeInfo = get_attribute_info(gl, attribute.type);
@@ -598,3 +634,4 @@ var _elm_community$elm_webgl$Native_WebGL = function () {
   };
 
 }();
+
