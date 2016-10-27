@@ -205,7 +205,7 @@ var _elm_community$elm_webgl$Native_WebGL = function () {
     A2(_elm_lang$core$List$map, function (elem) {
       dataFill(array, attributeInfo.size, data_idx, elem, attribute.name);
       data_idx += attributeInfo.size * elem_length;
-    }, bufferElems);
+    }, _elm_lang$core$List$reverse(bufferElems));
 
     var buffer = gl.createBuffer();
     LOG('Created attribute buffer ' + attribute.name);
