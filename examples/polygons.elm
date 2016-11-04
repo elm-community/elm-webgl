@@ -4,20 +4,26 @@ import Math.Matrix4 exposing (..)
 import WebGL exposing (..)
 import Html exposing (Html)
 import Html.App as Html
-import Html.Attributes exposing (width, height)
-import Html exposing (div, text, p)
+import Html.Attributes exposing (width, height, type', min, max, value, step)
+import Html exposing (div, text, p, article, input, section, aside)
 import AnimationFrame
 
 
 main : Program Never
 main =
-  Html.program
-    { init = (0, Cmd.none)
+  Html.beginnerProgram
+    { model = initialModel
     , view = view
-    , subscriptions = (\model -> AnimationFrame.diffs Basics.identity)
-    , update = (\elapsed currentTime -> (elapsed + currentTime, Cmd.none))
+    , update = update
     }
 
+
+initialModel =
+  { sides = 5
+  , radius = 0.5
+  , color = vec3 1.0 0.6 0.0
+  , mesh = ngon (V2.vec2 0 0) 5 0.5 (vec3 1.0 0.6 0.0)
+  }
 
 type alias Vertex = { position : Vec3, color : Vec3 }
 
@@ -31,48 +37,40 @@ type alias Model =
 type Msg
   = Sides Int
   | Radius Float
-  | Color Vec3
+  --| Color Vec3
 
 
-update : Model -> Msg -> Model
-update model msg =
+update : Msg -> Model -> Model
+update msg model =
   case msg of
     Sides sides ->
-      let
-        drawable = ngon (V2.vec2 0 0) sides model.radius model.color
+      let 
+        mesh = ngon (V2.vec2 0 0) sides model.radius model.color
       in
-        { model | sides = sides, mesh = drawable }
+        { model | sides = sides, mesh = mesh }
     Radius radius ->
-      let
-        drawable = ngon (V2.vec2 0 0) model.sides radius model.color
+      let 
+        mesh = ngon (V2.vec2 0 0) model.sides radius model.color
       in
-        { model | radius = radius, mesh = drawable }
+        { model | radius = radius, mesh = mesh }
 
 
-view : Model -> Html a
+view : Model -> Html msg
 view model =
   article []
-    [ aside []
-      [ div []
-        [ label [] [ text "Sides" ]
-        , input [ type' "number", min 3, max 16, step 1, value model.sides, onInput Sides ] []
-        ]
-      , div []
-        [ label [] [ text "Radius" ]
-        , input [ type' "number", min 0.1, max 1.0, step 0.01, value model.radius, onInput Radius ] []
-        ]
-      ]
-    , section []
-      [ WebGL.toHtml
-        [ width 400, height 400 ]
-        [ WebGL.render vertexShader fragmentShader model.mesh { } ]
-      ]
+  [ aside [] []
+  , section []
+    [ WebGL.toHtml
+      [ width 400, height 400 ]
+      [ WebGL.render vertexShader fragmentShader model.mesh { } ]
     ]
+  ]
 
 
 nextNGonPoint : Float -> Int -> List V2.Vec2 -> List V2.Vec2
 nextNGonPoint alpha current acc =
   let
+    -- the point which is radius from position in direction angle
     x = cos (alpha * (toFloat current))
     y = sin (alpha * (toFloat current))
     vertex = V2.vec2 x y
@@ -95,12 +93,9 @@ ngon position sides radius color =
   in
     List.map vec2ToVertex vertices
       |> TriangleFan
+
     
-
- 
-
-
--- SHADERS
+-- Shaders
 
 vertexShader :
   Shader
