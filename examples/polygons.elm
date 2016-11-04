@@ -4,8 +4,10 @@ import Math.Matrix4 exposing (..)
 import WebGL exposing (..)
 import Html exposing (Html)
 import Html.App as Html
-import Html.Attributes exposing (width, height, type', min, max, value, step)
-import Html exposing (div, text, p, article, input, section, aside)
+import Html.Attributes as Attr
+import Html.Events as Evt
+import Html exposing (div, text, code, article, input, section, aside, label)
+import String
 import AnimationFrame
 
 
@@ -54,39 +56,74 @@ update msg model =
       in
         { model | radius = radius, mesh = mesh }
 
+parseInt s =
+  case (String.toInt s) of
+    Ok n -> n
+    Err e -> 0
 
-view : Model -> Html msg
+parseFloat s =
+  case (String.toFloat s) of
+    Ok n -> n
+    Err e -> 0.0
+
+
+view : Model -> Html Msg
 view model =
   article []
-  [ aside [] []
+  [ aside [ Attr.style [ ("position", "absolute"), ("width", "400px"), ("right", "0") ] ]
+    [ div []
+      [ label [] [ text "Sides" ]
+      , input
+        [ Attr.type' "number"
+        , Attr.min "3"
+        , Attr.max "20"
+        , Attr.step "1"
+        , Attr.value (toString model.sides)
+        , Evt.onInput (\v -> Sides (parseInt v))
+        ] []
+      ]
+    , div []
+      [ label [] [ text "Radius" ]
+      , input
+        [ Attr.type' "number"
+        , Attr.min "0.01"
+        , Attr.max "1.0"
+        , Attr.step "0.01"
+        , Attr.value (toString model.radius)
+        , Evt.onInput (\v -> Radius (parseFloat v))
+        ] []
+      ]
+    , div []
+      [ code [] [ text (toString model.mesh) ] ]
+    ]
   , section []
     [ WebGL.toHtml
-      [ width 400, height 400 ]
+      [ Attr.width 400, Attr.height 400 ]
       [ WebGL.render vertexShader fragmentShader model.mesh { } ]
     ]
   ]
 
 
-nextNGonPoint : Float -> Int -> List V2.Vec2 -> List V2.Vec2
-nextNGonPoint alpha current acc =
+nextNGonPoint : Float -> Float -> Int -> List V2.Vec2 -> List V2.Vec2
+nextNGonPoint scale alpha current acc =
   let
     -- the point which is radius from position in direction angle
-    x = cos (alpha * (toFloat current))
-    y = sin (alpha * (toFloat current))
+    x = scale * cos (alpha * (toFloat current))
+    y = scale * sin (alpha * (toFloat current))
     vertex = V2.vec2 x y
     next = current - 1
   in
     if current == 0 then
       vertex::acc
     else
-      nextNGonPoint alpha next (vertex::acc)
+      nextNGonPoint scale alpha next (vertex::acc)
 
 ngon : V2.Vec2 -> Int -> Float -> Vec3 -> Drawable Vertex
 ngon position sides radius color =
   let
     alpha : Float
     alpha = (pi * 2.0 / (toFloat sides)) --+ (pi/4.0)
-    vertices = nextNGonPoint alpha (sides - 1) []
+    vertices = nextNGonPoint radius alpha (sides - 1) []
     vec2ToVertex = (\v -> 
       { position = vec3 (V2.getX v) (V2.getY v) 0, color = color }
     )
