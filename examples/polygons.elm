@@ -39,7 +39,6 @@ type alias Model =
 type Msg
   = Sides Int
   | Radius Float
-  --| Color Vec3
 
 
 update : Msg -> Model -> Model
@@ -107,7 +106,6 @@ view model =
 nextNGonPoint : Float -> Float -> Int -> List V2.Vec2 -> List V2.Vec2
 nextNGonPoint scale alpha current acc =
   let
-    -- the point which is radius from position in direction angle
     x = scale * cos (alpha * (toFloat current))
     y = scale * sin (alpha * (toFloat current))
     vertex = V2.vec2 x y
