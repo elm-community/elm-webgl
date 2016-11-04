@@ -5,6 +5,7 @@ import WebGL exposing (..)
 import Html exposing (Html)
 import Html.App as Html
 import Html.Attributes exposing (width, height)
+import Html exposing (div, text, p)
 import AnimationFrame
 
 type alias Vertex = { position : Vec3, color : Vec3 }
@@ -39,9 +40,38 @@ rectangle position width height color =
       ]
 
 
+nextNGonPoint : Float -> Int -> List V2.Vec2 -> List V2.Vec2
+nextNGonPoint alpha current acc =
+  let
+    -- the point which is radius from position in direction angle
+    x = cos (alpha * (toFloat current))
+    y = sin (alpha * (toFloat current))
+    vertex = V2.vec2 x y
+    next = current - 1
+  in
+    if current == 0 then
+      vertex::acc
+    else
+      nextNGonPoint alpha next (vertex::acc)
+
+ngon : V2.Vec2 -> Int -> Float -> Vec3 -> Drawable Vertex
+ngon position sides radius color =
+  let
+    alpha : Float
+    alpha = (pi * 2.0 / (toFloat sides)) --+ (pi/4.0)
+    vertices = nextNGonPoint alpha (sides - 1) []
+    vec2ToVertex = (\v -> 
+      { position = vec3 (V2.getX v) (V2.getY v) 0, color = color }
+    )
+  in
+    List.map vec2ToVertex vertices
+      |> TriangleFan
+    
+
 mesh1 = square (V2.vec2 -0.2 0.4) 0.2 (vec3 0.2 0 0.3)
 mesh2 = square (V2.vec2 0.2 0.4) 0.2 (vec3 0.2 0 0.3)
 mesh3 = line (V2.vec2 -0.2 0.4) (V2.vec2 0.2 0.4) (vec3 0.3 0.1 0.8)
+mesh4 = ngon (V2.vec2 0 0) 7 0.3 (vec3 1.0 0.0 0.0)
  
 main : Program Never
 main =
@@ -55,12 +85,16 @@ main =
 
 view : Float -> Html msg
 view t =
-  WebGL.toHtml
-    [ width 400, height 400 ]
-    [ WebGL.render vertexShader fragmentShader mesh1 { }
-    , WebGL.render vertexShader fragmentShader mesh2 { }
-    , WebGL.render vertexShader fragmentShader mesh3 { }
-    ]
+  div []
+  [ p [] [ text (toString mesh4) ]
+  , WebGL.toHtml
+      [ width 400, height 400 ]
+      [ WebGL.render vertexShader fragmentShader mesh4 { }
+      --, WebGL.render vertexShader fragmentShader mesh2 { }
+      --, WebGL.render vertexShader fragmentShader mesh3 { }
+      --, WebGL.render vertexShader fragmentShader mesh4 { }
+      ]
+  ]
 
 perspective : Float -> Mat4
 perspective t =
