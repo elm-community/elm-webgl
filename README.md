@@ -1,3 +1,5 @@
+DEPRECATED: Renamed to [elm-community/webgl](http://package.elm-lang.org/packages/elm-community/webgl/latest)
+
 # WebGL for Elm
 
 [A simple API](http://package.elm-lang.org/packages/elm-community/elm-webgl/latest/WebGL)
