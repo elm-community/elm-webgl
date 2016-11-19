@@ -45,6 +45,8 @@ to form any shape. Each corner of a triangle is called a *vertex* and contains a
 bunch of *attributes* that describe that particular corner. These attributes can
 be things like position and color.
 
+IndexedTriangles is a special mode in which you provide a list of attributes that describe the vertexes and and a list of indices, that are grouped in groups of three that refer to the vertexes that form each triangle.
+
 So when you create a `Triangle` you are really providing three sets of attributes
 that describe the corners of a triangle.
 
@@ -59,6 +61,7 @@ type Drawable attributes
   | Points (List attributes)
   | TriangleFan (List attributes)
   | TriangleStrip (List attributes)
+  | IndexedTriangles (List attributes, List Int)
 
 {-| Shader is a phantom data type. Don't instantiate it yourself. See below.
 -}
